@@ -7,6 +7,8 @@ import {
   Select,
   MenuItem,
   InputLabel,
+  Modal,
+  Box,
 } from "@mui/material";
 import axios from "axios";
 
@@ -14,6 +16,21 @@ import { API_ROOT } from "../lib/const";
 
 
 const AddFoods = (props) => {
+  const [open, handleOpen] = useState(false);
+  const modalOpen = () => handleOpen(true);
+  const modalClose = () => handleOpen(false);
+  const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+
   const createToken = () => {
     const S = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     const N = 40;
@@ -33,7 +50,7 @@ const AddFoods = (props) => {
         "user_id": props.user.id,
         "created_at": food.created_at,
         "updated_at": food.updated_at,
-      })
+      });
     } else {
       return ({
         "name": "",
@@ -44,9 +61,9 @@ const AddFoods = (props) => {
         "user_id": props.user.id,
         "created_at": Date(),
         "updated_at": Date(),
-      })
-    }
-  }
+      });
+    };
+  };
 
   const foodForm = (food, index) => {
     return (
@@ -121,20 +138,26 @@ const AddFoods = (props) => {
             value={true}
           >含めない</MenuItem>
         </Select>
+        <Button
+          data-index={index}
+          onClick={(event) => props.deleteFood(event)}
+        >削除</Button>
       </ListItem>
     );
-  }
+  };
 
   const createFoodsForm = () => {
     return props.foods.map((food, index) => {
-      return foodForm(food, index);
+      if (food["store"] !== 0) {
+        return foodForm(food, index);
+      };
     });
-  }
+  };
 
   const addFood = (event) => {
     event.preventDefault();
     props.addFoods(foodData(false));
-  }
+  };
 
   const sendFoods = async (event) => {
     event.preventDefault();
@@ -147,19 +170,60 @@ const AddFoods = (props) => {
       );
     } catch (e) {
       console.error(e);
-    }
-  }
+    };
+  };
+
+  const addPastFood = (event) => {
+    event.preventDefault();
+
+    const index = event.target.dataset.index;
+    let foods = props.foods.slice();
+    foods[index].store = 1;
+    props.setFoods(foods);
+    modalClose();
+  };
+
+  const pastFoodList = () => {
+    return props.foods.map((food, index) => {
+      if (food["store"] == 0) {
+        return (
+          <ListItem
+            key={food.token}
+          >
+            {food.name}
+            <Button
+              data-index={index}
+              onClick={(event) => addPastFood(event)}
+            >追加</Button>
+          </ListItem>
+        );
+      };
+    });
+  };
 
   return (
     <React.Fragment>
-      <h1>Add Foods</h1>
+      <h1>食材管理</h1>
       <List className="food-list">{createFoodsForm()}</List>
       <Button
-        onClick={(event) => addFood(event)}
+        onClick={addFood}
       >食材を追加</Button>
+      <Button
+        onClick={modalOpen}
+      >過去の食材を追加</Button>
       <Button
         onClick={(event) => sendFoods(event)}
       >登録</Button>
+      <Modal
+        open={open}
+        onClose={modalClose}
+      >
+        <Box sx={modalStyle}>
+          <h3>過去の食材一覧</h3>
+          <List className="past-food-list">{pastFoodList()}</List>
+          <Button onClick={modalClose}>閉じる</Button>
+        </Box>
+      </Modal>
     </React.Fragment>
   );
 }

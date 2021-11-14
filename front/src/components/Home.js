@@ -5,14 +5,14 @@ const Home = (props) => {
   if (Object.keys(props.user)) {
     return (
       <React.Fragment>
-        <h1>Home</h1>
+        <h1>ホーム</h1>
       </React.Fragment>
     )
   } else {
     return (
       <React.Fragment>
-        <h1>Home</h1>
-        <p>Please Login.</p>
+        <h1>ホーム</h1>
+        <p>ログインしてください</p>
       </React.Fragment>
     )
   }
