@@ -6,8 +6,8 @@ import { Redirect } from "react-router-dom";
 import { API_ROOT } from "../lib/const";
 
 const Signin = (props) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const signin = async (event) => {
     event.preventDefault();
@@ -22,9 +22,9 @@ const Signin = (props) => {
         data,
       );
       if (res.status === 200) {
-        Cookies.set('access-token', res.headers['access-token']);
-        Cookies.set('client', res.headers['client']);
-        Cookies.set('uid', res.headers['uid']);
+        Cookies.set("access-token", res.headers["access-token"]);
+        Cookies.set("client", res.headers["client"]);
+        Cookies.set("uid", res.headers["uid"]);
         props.handleCurrentUser();
       }
     } catch (error) {

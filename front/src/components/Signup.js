@@ -6,10 +6,10 @@ import { Redirect } from "react-router-dom";
 import { API_ROOT } from "../lib/const";
 
 const Signup = (props) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [password_confirmation, setPasswordConfirmation] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [password_confirmation, setPasswordConfirmation] = useState("");
 
   const signup = async (event) => {
     event.preventDefault();
@@ -26,9 +26,9 @@ const Signup = (props) => {
         data,
       );
       if (res.status === 200) {
-        Cookies.set('access-token', res.headers['access-token']);
-        Cookies.set('client', res.headers['client']);
-        Cookies.set('uid', res.headers['uid']);
+        Cookies.set("access-token", res.headers["access-token"]);
+        Cookies.set("client", res.headers["client"]);
+        Cookies.set("uid", res.headers["uid"]);
         props.handleCurrentUser();
       }
     } catch (error) {
