@@ -160,8 +160,10 @@ const AddFoods = (props) => {
   };
 
   const sendFoods = async (event) => {
+    props.setIsLoading(true);
     event.preventDefault();
     const data = {attributes: props.foods};
+    console.log(data);
     try {
       await axios.post(
         `${API_ROOT}/foods`,
@@ -170,6 +172,8 @@ const AddFoods = (props) => {
       );
     } catch (e) {
       console.error(e);
+    } finally {
+      props.setIsLoading(false);
     };
   };
 
