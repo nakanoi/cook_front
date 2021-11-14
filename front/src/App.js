@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import Cookie from 'js-cookie';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import Cookie from "js-cookie";
+import axios from "axios";
 import {
   Switch,
   Route,
   BrowserRouter as Router,
-} from 'react-router-dom';
+} from "react-router-dom";
 
-import Signin from './components/Signin';
-import Signup from './components/Signup';
-import Home from './components/Home';
-import AddFoods from './components/AddFoods';
-import { API_ROOT } from './lib/const';
+import Signin from "./components/Signin";
+import Signup from "./components/Signup";
+import Home from "./components/Home";
+import AddFoods from "./components/AddFoods";
+import { API_ROOT } from "./lib/const";
 
 
 const App = () => {
@@ -22,9 +22,9 @@ const App = () => {
 
   const headers = () => {
     return {
-      'access-token': Cookie.get('access-token'),
-      'client': Cookie.get('client'),
-      'uid': Cookie.get('uid'),
+      "access-token": Cookie.get("access-token"),
+      "client": Cookie.get("client"),
+      "uid": Cookie.get("uid"),
     }
   }
 
@@ -35,10 +35,12 @@ const App = () => {
         `${API_ROOT}/auth/sessions`,
         {headers: headers()}
       );
-      console.log(res.data);
       if (res.data.is_login) {
         setIsLoggedIn(true);
         setUser(res.data.user);
+        res.data.foods.map(food => {
+          delete food.id
+        });
         setFoods(res.data.foods);
       }
     } catch (err) {
@@ -46,6 +48,29 @@ const App = () => {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  const addFoods = (food) => {
+    let newFoods = foods.slice();
+    newFoods.push(food);
+    setFoods(newFoods);
+  }
+
+  const handleFoodInfo = (event, select=true, int=false) => {
+    let dataset;
+    if (select) {
+      dataset = event.explicitOriginalTarget.dataset;
+    } else {
+      dataset = event.target.parentElement.parentElement.dataset;
+    }
+
+    const index = dataset.index,
+          column = dataset.column;
+    let newFoods = foods.slice(),
+        value = event.target.value;
+    if (int) { value = Number(value); }
+    newFoods[index][column] = value;
+    setFoods(newFoods);
   }
 
   useEffect(() => {
@@ -84,7 +109,12 @@ const App = () => {
               exact
               render={
                 () => <AddFoods
+                  user={user}
+                  headers={headers}
                   foods={foods}
+                  lengt={foods.length}
+                  addFoods={addFoods}
+                  handleFoodInfo={handleFoodInfo}
                 />
               }
             ></Route>
