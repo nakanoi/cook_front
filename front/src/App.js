@@ -73,6 +73,13 @@ const App = () => {
     setFoods(newFoods);
   }
 
+  const deleteFood = (event) => {
+    const index = event.target.dataset.index;
+    let newFoods = foods.slice();
+    newFoods[index]["store"] = 0;
+    setFoods(newFoods);
+  }
+
   useEffect(() => {
     handleCurrentUser();
   }, []);
@@ -115,6 +122,8 @@ const App = () => {
                   lengt={foods.length}
                   addFoods={addFoods}
                   handleFoodInfo={handleFoodInfo}
+                  deleteFood={deleteFood}
+                  setFoods={setFoods}
                 />
               }
             ></Route>
