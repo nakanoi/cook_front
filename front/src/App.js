@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import {
   CircularProgress,
+  createTheme,
 } from '@mui/material'
 
 import Signin from "./components/Signin";
@@ -15,6 +16,8 @@ import Signup from "./components/Signup";
 import Home from "./components/Home";
 import AddFoods from "./components/AddFoods";
 import { API_ROOT } from "./lib/const";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 
 const App = () => {
@@ -22,6 +25,24 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
   const [foods, setFoods] = useState([]);
+  const [histories, setHistories] = useState([]);
+
+  const theme = createTheme({
+    palette: {
+      button: {
+        main: '#f6581e',
+        contrastText: '#fff',
+      },
+      food_green: {
+        main: '#a6cd56',
+        contrastText: '#fff',
+      },
+      delete: {
+        main: '#ff3c3c',
+        contrastText: '#fff',
+      }
+    }
+  });
 
   const headers = () => {
     return {
@@ -29,6 +50,16 @@ const App = () => {
       "client": Cookie.get("client"),
       "uid": Cookie.get("uid"),
     }
+  }
+
+  const signout = () => {
+    setIsLoading(true);
+    setIsLoggedIn(false);
+    Cookie.remove("access-token");
+    Cookie.remove("client");
+    Cookie.remove("uid");
+    setUser({});
+    setIsLoading(false);
   }
 
   const handleCurrentUser = async () => {
@@ -45,6 +76,7 @@ const App = () => {
           delete food.id
         });
         setFoods(res.data.foods);
+        setHistories(res.data.histories);
       }
     } catch (err) {
       console.error(err);
@@ -71,7 +103,11 @@ const App = () => {
           column = dataset.column;
     let newFoods = foods.slice(),
         value = event.target.value;
-    if (int) { value = Number(value); }
+    if (int && value === "") {
+      value = "0";
+    } else if (int) {
+      value = Number(value);
+    }
     newFoods[index][column] = value;
     setFoods(newFoods);
   }
@@ -79,7 +115,9 @@ const App = () => {
   const deleteFood = (event) => {
     const index = event.target.dataset.index;
     let newFoods = foods.slice();
-    if (newFoods[index]["store"] === "") {
+    if (newFoods[index]["name"] === "" || newFoods[index]["unit"] === "") {
+      newFoods.splice(index, 1);
+    } else if (newFoods[index]["store"] in ["", 0]) {
       newFoods.splice(index, 1);
     } else {
       newFoods[index]["store"] = 0;
@@ -101,59 +139,71 @@ const App = () => {
     return (
       <React.Fragment>
         <Router>
-          <Switch>
-            <Route
-              path="/signin"
-              exact
-              render={
-                () => <Signin
-                  isLoggedIn={isLoggedIn}
-                  handleCurrentUser={handleCurrentUser}
-                  setIsLoading={setIsLoading}
-                />
-              }
-            ></Route>
-            <Route
-              path="/signup"
-              exact
-              render={
-                () => <Signup
-                  isLoggedIn={isLoggedIn}
-                  handleCurrentUser={handleCurrentUser}
-                  setIsLoading={setIsLoading}
-                />
-              }
-            ></Route>
-            {isLoggedIn && 
+          <Header
+            isLoggedIn={isLoggedIn}
+            signout={signout}
+          />
+          <div className="container">
+            <Switch>
               <Route
-                path="/addfoods"
+                path="/signin"
                 exact
                 render={
-                  () => <AddFoods
-                    user={user}
-                    headers={headers}
-                    foods={foods}
-                    lengt={foods.length}
-                    addFoods={addFoods}
-                    handleFoodInfo={handleFoodInfo}
-                    deleteFood={deleteFood}
-                    setFoods={setFoods}
+                  () => <Signin
+                    isLoggedIn={isLoggedIn}
+                    handleCurrentUser={handleCurrentUser}
                     setIsLoading={setIsLoading}
+                    theme={theme}
                   />
                 }
               ></Route>
-            }
-            <Route
-              path="/"
-              exact
-              render={
-                () => <Home
-                  user={user}
-                  foods={foods}
-                />
+              <Route
+                path="/signup"
+                exact
+                render={
+                  () => <Signup
+                    isLoggedIn={isLoggedIn}
+                    handleCurrentUser={handleCurrentUser}
+                    setIsLoading={setIsLoading}
+                    theme={theme}
+                  />
+                }
+              ></Route>
+              {isLoggedIn && 
+                <Route
+                  path="/addfoods"
+                  exact
+                  render={
+                    () => <AddFoods
+                      user={user}
+                      headers={headers}
+                      foods={foods}
+                      lengt={foods.length}
+                      addFoods={addFoods}
+                      handleFoodInfo={handleFoodInfo}
+                      deleteFood={deleteFood}
+                      setFoods={setFoods}
+                      setIsLoading={setIsLoading}
+                      theme={theme}
+                    />
+                  }
+                ></Route>
               }
-            ></Route>
-          </Switch>
+              <Route
+                path="/"
+                exact
+                render={
+                  () => <Home
+                    user={user}
+                    foods={foods}
+                    histories={histories}
+                    isLoggedIn={isLoggedIn}
+                  />
+                }
+              ></Route>
+            </Switch>
+          </div>
+          <Footer />
         </Router>
       </React.Fragment>
     );
@@ -161,3 +211,4 @@ const App = () => {
 }
 
 export default App;
+

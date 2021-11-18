@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { Redirect } from "react-router-dom";
+import {
+  TextField,
+  Button,
+  ThemeProvider,
+} from "@mui/material";
 
 import { API_ROOT } from "../lib/const";
 
@@ -40,26 +45,31 @@ const Signin = (props) => {
     return (
       <React.Fragment>
         <h1>サインイン</h1>
-        <form>
+        <form className="auth-form">
           <p>メールアドレス</p>
-          <input
-            required
-            type="email"
-            value={email}
-            label="メールアドレス"
-            onChange={event => setEmail(event.target.value)}
-          />
-          <p>パスワード</p>
-          <input
-            required
-            type="password"
-            value={password}
-            label="パスワード"
-            onChange={event => setPassword(event.target.value)}
-          />
-          <button
-            onClick={event => signin(event)}
-          >サインイン</button>
+          <ThemeProvider theme={props.theme}>
+            <TextField
+              required
+              type="email"
+              value={email}
+              className="input-field"
+              onChange={event => setEmail(event.target.value)}
+            />
+            <p>パスワード</p>
+            <TextField
+              required
+              type="password"
+              value={password}
+              className="input-field"
+              onChange={event => setPassword(event.target.value)}
+            />
+            <Button
+              onClick={event => signin(event)}
+              className="input-field"
+              variant="contained"
+              color="button"
+            >サインイン</Button>
+          </ThemeProvider>
         </form>
       </React.Fragment>
     )
