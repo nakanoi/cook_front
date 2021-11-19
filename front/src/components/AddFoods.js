@@ -42,6 +42,16 @@ const AddFoods = (props) => {
     ).join('');
   }
 
+  const returnStrDate = (day) => {
+    var y = day.getFullYear();
+    var m = day.getMonth() + 1;
+    var d = day.getDate() + 1;
+    var h = day.getHours();
+    var min = day.getMinutes();
+    var s = day.getSeconds();
+    return `${y}-${m}-${d} ${h}:${min}:${s}`;
+  }
+
   const foodData = (food) => {
     if (food) {
       return ({
@@ -53,8 +63,10 @@ const AddFoods = (props) => {
         "user_id": props.user.id,
         "created_at": food.created_at,
         "updated_at": food.updated_at,
+        "display": true,
       });
     } else {
+      const today = new Date();
       return ({
         "name": "",
         "store": 1,
@@ -62,8 +74,9 @@ const AddFoods = (props) => {
         "ignore": false,
         "token": createToken(),
         "user_id": props.user.id,
-        "created_at": Date(),
-        "updated_at": Date(),
+        "created_at": returnStrDate(today),
+        "updated_at": returnStrDate(today),
+        "display": true,
       });
     }
   }
@@ -79,11 +92,11 @@ const AddFoods = (props) => {
                 <TextField
                   lavel="食材名"
                   variant="standard"
-                  value={props.foods[index]["name"]}
+                  value={props.foods[index].name}
                   data-index={index}
                   data-column={"name"}
                   onChange={(event) => props.handleFoodInfo(
-                    event, false, false
+                    event, false
                   )}
                   className="food-input"
                   color="food_green"
@@ -97,11 +110,11 @@ const AddFoods = (props) => {
                   type="number"
                   lavel="在庫"
                   variant="standard"
-                  value={props.foods[index]["store"]}
+                  value={props.foods[index].store}
                   data-index={index}
                   data-column={"store"}
                   onChange={(event) => props.handleFoodInfo(
-                    event, false, true
+                    event, false
                   )}
                   className="food-input no-spin"
                   color="food_green"
@@ -114,7 +127,7 @@ const AddFoods = (props) => {
                 <Select
                   id={`unit-select-${index}`}
                   label="単位"
-                  value={props.foods[index]["unit"]}
+                  value={props.foods[index].unit}
                   data-index={index}
                   data-column={"unit"}
                   onChange={(event) => props.handleFoodInfo(event)}
@@ -145,7 +158,7 @@ const AddFoods = (props) => {
                 <Select
                   id={`ignore-select-${index}`}
                   label="検索対象"
-                  value={props.foods[index]["ignore"]}
+                  value={props.foods[index].ignore}
                   onChange={(event) => props.handleFoodInfo(event)}
                   className="food-input"
                   color="food_green"
@@ -172,7 +185,7 @@ const AddFoods = (props) => {
             fullWidth
             variant="contained"
             color="delete"
-          >{props.foods[index]["name"]}を削除</Button>
+          >{props.foods[index].name}を削除</Button>
         </div>
       </React.Fragment>
     );
@@ -180,7 +193,7 @@ const AddFoods = (props) => {
 
   const createFoodsForm = () => {
     return props.foods.map((food, index) => {
-      if (food["store"] !== 0) {
+      if (food.display) {
         return foodForm(food, index);
       }
     });
@@ -196,21 +209,22 @@ const AddFoods = (props) => {
       "name": "食材名",
       "unit": "単位",
       "store": "数量",
-      "ignore": "検索対象にふくめるか",
+      "ignore": "レシピの検索対象",
     }
     const keys = ["name", "unit", "store", "ignore"];
     let sentFoods = props.foods.slice();
 
     for (var i = 0; i < props.foods.length; i++) {
       for (var j = 0; j < keys.length; j++) {
-        var key = keys[j];
-        if (props.foods[i][key] === "") {
-          console.log('OUT.')
-          return [false, `${keyToColumn[key]}は空欄ではいけません`]
+        if (props.foods[i][keys[j]] === "") {
+          return [false, `${keyToColumn[keys[j]]}は空欄ではいけません`]
         }
-        if (key === "store" ) {
-          sentFoods[i][key] = Number(props.foods[i][key]);
-        }
+      }
+      try {
+        sentFoods[i].store = Number(sentFoods[i].store);
+        if (sentFoods[i].store < 0) { return [false, `数量は正数でなければなりません`] }
+      } catch (err) {
+        return [false, `数量は正数でなければなりません`]
       }
     }
 
@@ -227,12 +241,18 @@ const AddFoods = (props) => {
       alert(valids[1]);
       return
     }
-
-    const data = {attributes: props.foods};
+    const data = props.foods.slice().map(food => {
+      var newFood = {}
+      Object.keys(food).map(key => {
+        if (key !== 'display') newFood[key] = food[key];
+      })
+      return newFood;
+    });
+    const request = {attributes: data};
     try {
       await axios.post(
         `${API_ROOT}/foods`,
-        data,
+        request,
         {headers: props.headers()}
       );
     } catch (e) {
@@ -248,17 +268,18 @@ const AddFoods = (props) => {
     const index = event.target.dataset.index;
     let foods = props.foods.slice();
     foods[index].store = 1;
+    foods[index].display = true;
     props.setFoods(foods);
     modalClose();
   }
 
   const pastFoodList = () => {
     return props.foods.map((food, index) => {
-      if (food["store"] == 0) {
+      if (!food.display) {
         return (
           <ListItem
             key={food.token}
-            className="past-food-list"
+            className="past-food-list-item"
           >
             <p className="past-food-name">{food.name}</p>
             <Button

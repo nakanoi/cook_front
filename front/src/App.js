@@ -15,6 +15,7 @@ import Signin from "./components/Signin";
 import Signup from "./components/Signup";
 import Home from "./components/Home";
 import AddFoods from "./components/AddFoods";
+import NotFound from "./components/NotFound";
 import { API_ROOT } from "./lib/const";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -62,6 +63,22 @@ const App = () => {
     setIsLoading(false);
   }
 
+  const setInitialFoods = (foods) => {
+    let newFoods = foods.slice();
+    newFoods.map(food => {
+      if (food.status) {
+        delete food.status;
+      }
+      if (food.store === 0) {
+        food.display = false;
+      } else {
+        food.display = true;
+      }
+      return food;
+    })
+    setFoods(newFoods);
+  }
+
   const handleCurrentUser = async () => {
     try {
       setIsLoading(true);
@@ -71,11 +88,11 @@ const App = () => {
       );
       if (res.data.is_login) {
         setIsLoggedIn(true);
-        setUser(res.data.user);
+        setUser(res.data);
         res.data.foods.map(food => {
           delete food.id
         });
-        setFoods(res.data.foods);
+        setInitialFoods(res.data.foods);
         setHistories(res.data.histories);
       }
     } catch (err) {
@@ -91,7 +108,7 @@ const App = () => {
     setFoods(newFoods);
   }
 
-  const handleFoodInfo = (event, select=true, int=false) => {
+  const handleFoodInfo = (event, select=true) => {
     let dataset;
     if (select) {
       dataset = event.explicitOriginalTarget.dataset;
@@ -103,11 +120,6 @@ const App = () => {
           column = dataset.column;
     let newFoods = foods.slice(),
         value = event.target.value;
-    if (int && value === "") {
-      value = "0";
-    } else if (int) {
-      value = Number(value);
-    }
     newFoods[index][column] = value;
     setFoods(newFoods);
   }
@@ -115,12 +127,12 @@ const App = () => {
   const deleteFood = (event) => {
     const index = event.target.dataset.index;
     let newFoods = foods.slice();
-    if (newFoods[index]["name"] === "" || newFoods[index]["unit"] === "") {
-      newFoods.splice(index, 1);
-    } else if (newFoods[index]["store"] in ["", 0]) {
+    if (newFoods[index].name === "" ||
+          newFoods[index].unit === "") {
       newFoods.splice(index, 1);
     } else {
-      newFoods[index]["store"] = 0;
+      newFoods[index].store = 0;
+      newFoods[index].display = false;
     }
     setFoods(newFoods);
   }
@@ -201,6 +213,7 @@ const App = () => {
                   />
                 }
               ></Route>
+              <Route component={NotFound}></Route>
             </Switch>
           </div>
           <Footer />
