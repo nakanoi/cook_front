@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { Redirect } from "react-router-dom";
+import {
+  TextField,
+  Button,
+  ThemeProvider,
+} from "@mui/material";
 
 import { API_ROOT } from "../lib/const";
 
@@ -44,42 +49,47 @@ const Signup = (props) => {
     return (
       <React.Fragment>
         <h1>サインアップ</h1>
-        <form>
+        <form className="auth-form">
           <p>名前</p>
-          <input
-            required
-            type="text"
-            value={name}
-            label="名前"
-            onChange={event => setName(event.target.value)}
-          />
-          <p>メールアドレス</p>
-          <input
-            required
-            type="email"
-            value={email}
-            label="メールアドレス"
-            onChange={event => setEmail(event.target.value)}
-          />
-          <p>パスワード</p>
-          <input
-            required
-            type="password"
-            value={password}
-            label="パスワード"
-            onChange={event => setPassword(event.target.value)}
-          />
-          <p>パスワード(確認)</p>
-          <input
-            required
-            type="password"
-            value={password_confirmation}
-            label="パスワード(確認)"
-            onChange={event => setPasswordConfirmation(event.target.value)}
-          />
-          <button
-            onClick={event => signup(event)}
-          >サインアップ</button>
+          <ThemeProvider theme={props.theme}>
+            <TextField
+              required
+              type="text"
+              value={name}
+              className="input-field"
+              onChange={event => setName(event.target.value)}
+            />
+            <p>メールアドレス</p>
+            <TextField
+              required
+              type="email"
+              value={email}
+              className="input-field"
+              onChange={event => setEmail(event.target.value)}
+            />
+            <p>パスワード</p>
+            <TextField
+              required
+              type="password"
+              value={password}
+              className="input-field"
+              onChange={event => setPassword(event.target.value)}
+            />
+            <p>パスワード(確認)</p>
+            <TextField
+              required
+              type="password"
+              value={password_confirmation}
+              className="input-field"
+              onChange={event => setPasswordConfirmation(event.target.value)}
+            />
+            <Button
+              onClick={event => signup(event)}
+              className="input-field"
+              variant="contained"
+              color="button"
+            >サインアップ</Button>
+          </ThemeProvider>
         </form>
       </React.Fragment>
     )
