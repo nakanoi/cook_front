@@ -1,3 +1,11 @@
 #!/bin/bash
 cd /code
-PORT=8000 yarn start
+source ./.env
+echo $DOCKER_ENV
+if [ $DOCKER_ENV = production ]; then
+  yarn build
+  yarn global add serve
+  serve -s build -l 8000
+else
+  PORT=8000 yarn start
+fi

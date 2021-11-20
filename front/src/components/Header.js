@@ -54,7 +54,7 @@ const Header = (props) => {
       <React.Fragment>
         <header className="header">
           <Link to="/">
-            <p className="logo"><img src={logo} /></p>
+            <p className="logo"><img src={logo} alt="logo" /></p>
           </Link>
           <List className="header-nav">
             <ListItem key="home">
@@ -108,7 +108,7 @@ const Header = (props) => {
       <React.Fragment>
         <header className="header">
           <Link to="/">
-            <p className="logo"><img src={logo} /></p>
+            <p className="logo"><img src={logo} alt="logo" /></p>
           </Link>
           <List className="header-nav">
             <ListItem key="home">
