@@ -5,4 +5,6 @@ COPY run.sh /
 RUN mkdir /code
 WORKDIR /code
 EXPOSE 8000
-CMD ["PORT=8000", "yarn", "start"]
+COPY ./front/ /code/
+RUN yarn install
+CMD ["sh", "/run.sh"]

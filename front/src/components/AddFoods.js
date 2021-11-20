@@ -196,6 +196,7 @@ const AddFoods = (props) => {
       if (food.display) {
         return foodForm(food, index);
       }
+      return <React.Fragment></React.Fragment>;
     });
   }
 
@@ -245,6 +246,7 @@ const AddFoods = (props) => {
       var newFood = {}
       Object.keys(food).map(key => {
         if (key !== 'display') newFood[key] = food[key];
+        return key
       })
       return newFood;
     });
@@ -291,6 +293,7 @@ const AddFoods = (props) => {
           </ListItem>
         );
       }
+      return <React.Fragment></React.Fragment>;
     });
   }
 

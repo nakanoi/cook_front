@@ -21,6 +21,7 @@ const Home = (props) => {
           </TableRow>
         );
       }
+      return <React.Fragment></React.Fragment>;
     });
   }
 
@@ -78,6 +79,7 @@ const Home = (props) => {
           </ListItem>
         );
       }
+      return <React.Fragment></React.Fragment>;
     });
   }
 
@@ -118,7 +120,7 @@ const Home = (props) => {
         <h1>ホーム</h1>
         <h2>Mealistへようこそ</h2>
         <p>サインアップ後、あなたの家の冷蔵庫にある食材を登録してください</p>
-        <p>毎日16:30に、<a className="blue-link" href="https://recipe.rakuten.co.jp/" target="_blank" title="Rakuten">Rakutenレシピ</a>よりあなたの冷蔵庫にある食材からレシピを提案します</p>
+        <p>毎日16:30に、<a className="blue-link" href="https://recipe.rakuten.co.jp/" target="_blank" rel="noreferrer" title="Rakuten">Rakutenレシピ</a>よりあなたの冷蔵庫にある食材からレシピを提案します</p>
       </React.Fragment>
     )
   }

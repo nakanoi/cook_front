@@ -91,6 +91,7 @@ const App = () => {
         setUser(res.data);
         res.data.foods.map(food => {
           delete food.id
+          return food
         });
         setInitialFoods(res.data.foods);
         setHistories(res.data.histories);
