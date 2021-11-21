@@ -100,7 +100,9 @@ docker-compose up --build
 2. Sign in with email and password.
 ![signin](https://user-images.githubusercontent.com/72122101/142730378-51ca5359-5a95-412e-b5dc-85ece6a9bff6.png)
 3. Add foods you already have in your fridge.
-![addfoods](https://user-images.githubusercontent.com/72122101/142730386-5946782a-d560-41ab-971e-1de17c298646.png)
+![addfoods](https://user-images.githubusercontent.com/72122101/142746393-4c4acb3e-c2d8-4b80-acc1-7a6746ff45eb.png)
+If you want to add foods you used to have, click '過去の食材を追加' and add them.
+![addpastfoods](https://user-images.githubusercontent.com/72122101/142746403-91710666-1ae8-4d75-84b5-5ae78c6b1620.png)
 4. You would recieve email which contains recipes this application choose everyday at 16:30 Asia/Tokyo.
 ![recipeemail](https://user-images.githubusercontent.com/72122101/142731996-1980f27a-1750-4c55-a9ef-1a7e7923e8d5.jpg)
 5. You can see all foods you have and meals you have recieved for the past 7 days.
