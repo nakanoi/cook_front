@@ -109,16 +109,7 @@ const App = () => {
     setFoods(newFoods);
   }
 
-  const handleFoodInfo = (event, select=true) => {
-    let dataset;
-    if (select) {
-      dataset = event.explicitOriginalTarget.dataset;
-    } else {
-      dataset = event.target.parentElement.parentElement.dataset;
-    }
-
-    const index = dataset.index,
-          column = dataset.column;
+  const handleFoodInfo = (event, index, column) => {
     let newFoods = foods.slice(),
         value = event.target.value;
     newFoods[index][column] = value;

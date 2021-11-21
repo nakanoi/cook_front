@@ -96,7 +96,7 @@ const AddFoods = (props) => {
                   data-index={index}
                   data-column={"name"}
                   onChange={(event) => props.handleFoodInfo(
-                    event, false
+                    event, index, "name"
                   )}
                   className="food-input"
                   color="food_green"
@@ -114,7 +114,7 @@ const AddFoods = (props) => {
                   data-index={index}
                   data-column={"store"}
                   onChange={(event) => props.handleFoodInfo(
-                    event, false
+                    event, index, "store"
                   )}
                   className="food-input no-spin"
                   color="food_green"
@@ -130,7 +130,9 @@ const AddFoods = (props) => {
                   value={props.foods[index].unit}
                   data-index={index}
                   data-column={"unit"}
-                  onChange={(event) => props.handleFoodInfo(event)}
+                  onChange={(event) => props.handleFoodInfo(
+                    event, index, "unit"
+                  )}
                   className="food-input"
                   color="food_green"
                 >
@@ -159,7 +161,9 @@ const AddFoods = (props) => {
                   id={`ignore-select-${index}`}
                   label="検索対象"
                   value={props.foods[index].ignore}
-                  onChange={(event) => props.handleFoodInfo(event)}
+                  onChange={(event) => props.handleFoodInfo(
+                    event, index, "ignore"
+                  )}
                   className="food-input"
                   color="food_green"
                 >
