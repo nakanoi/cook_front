@@ -16,6 +16,9 @@ And, since you register foods in your fridge, you can access to it anytime anywh
 
 I used these techniques below.
 
+### AWS
+![mealist](https://user-images.githubusercontent.com/72122101/145717252-7e123217-6e09-4c7e-9453-82711f29b8a2.png)
+
 ### Backend
 - [`Ruby on Rails`](https://github.com/rails/rails) - with API mode.
 - [`Nginx`](https://nginx.org/) - as a reverse proxy.
