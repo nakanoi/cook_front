@@ -1,1 +1,2 @@
-export const API_ROOT = 'http://localhost:8080/api/v1'
+const API_ROOT = `https://${process.env.REACT_APP_API_HOST}:${process.env.REACT_APP_API_PORT}/api/v1`;
+export default API_ROOT;

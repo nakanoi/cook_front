@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Cookie from "js-cookie";
+import Cookies from "js-cookie";
 import axios from "axios";
 import {
   Switch,
@@ -16,12 +16,12 @@ import Signup from "./components/Signup";
 import Home from "./components/Home";
 import AddFoods from "./components/AddFoods";
 import NotFound from "./components/NotFound";
-import { API_ROOT } from "./lib/const";
+import API_ROOT from "./lib/const";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
-
 const App = () => {
+  axios.defaults.withCredentials = true;
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
@@ -47,18 +47,18 @@ const App = () => {
 
   const headers = () => {
     return {
-      "access-token": Cookie.get("access-token"),
-      "client": Cookie.get("client"),
-      "uid": Cookie.get("uid"),
+      "access-token": Cookies.get("access-token"),
+      "client": Cookies.get("client"),
+      "uid": Cookies.get("uid"),
     }
   }
 
   const signout = () => {
     setIsLoading(true);
     setIsLoggedIn(false);
-    Cookie.remove("access-token");
-    Cookie.remove("client");
-    Cookie.remove("uid");
+    Cookies.remove("access-token");
+    Cookies.remove("client");
+    Cookies.remove("uid");
     setUser({});
     setIsLoading(false);
   }
