@@ -16,10 +16,11 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
-import { API_ROOT } from "../lib/const";
+import API_ROOT from "../lib/const";
 
 
 const AddFoods = (props) => {
+  axios.defaults.withCredentials = true;
   const [open, handleOpen] = useState(false);
   const modalOpen = () => handleOpen(true);
   const modalClose = () => handleOpen(false);

@@ -8,9 +8,10 @@ import {
   ThemeProvider,
 } from "@mui/material";
 
-import { API_ROOT } from "../lib/const";
+import API_ROOT from "../lib/const";
 
 const Signin = (props) => {
+  axios.defaults.withCredentials = true;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -27,9 +28,9 @@ const Signin = (props) => {
         data,
       );
       if (res.status === 200) {
-        Cookies.set("access-token", res.headers["access-token"]);
-        Cookies.set("client", res.headers["client"]);
-        Cookies.set("uid", res.headers["uid"]);
+        Cookies.set("access-token", res.headers["access-token"], { secure: true });
+        Cookies.set("client", res.headers["client"], { secure: true });
+        Cookies.set("uid", res.headers["uid"], { secure: true });
         props.handleCurrentUser();
       }
     } catch (error) {
