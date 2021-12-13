@@ -18,7 +18,7 @@ This service in on [Mealist](https://mealist.net)!
 I used these techniques below.
 
 ### AWS
-![mealist](https://user-images.githubusercontent.com/72122101/145717252-7e123217-6e09-4c7e-9453-82711f29b8a2.png)
+![mealist](https://user-images.githubusercontent.com/72122101/145717733-fb58ff1f-115e-4bde-ae0d-b303bd9fffe0.png)
 
 ### Backend
 - [`Ruby on Rails`](https://github.com/rails/rails) - with API mode.
