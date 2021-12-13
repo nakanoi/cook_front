@@ -5,9 +5,319 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  color: #ff8643;
+}
+
+#root {
+  display: flex;
+  flex-flow: column;
+  min-height: 100vh;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+a {
+  text-decoration: none;
+  color: #ff8643;
+}
+
+.blue-link {
+  color: rgb(80, 205, 255);
+}
+
+p {
+  margin: 0;
+  padding: 0;
+  color: black;
+}
+
+.container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+h1 {
+  margin: 1em 0;
+}
+
+h2 {
+  margin-bottom: .2em;
+}
+
+/* header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 3%;
+}
+
+.logo {
+  width: 20vw;
+  height: auto;
+  padding-top: .4em;
+}
+
+.menu-icon {
+  display: none;
+}
+
+.header-nav {
+  display: flex;
+}
+
+.header-nav li {
+  width: auto !important;
+}
+
+/* home */
+.home-wrap {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sidebar {
+  width: 25%;
+}
+
+.content {
+  width: 70%;
+}
+
+.black {
+  color: black;
+}
+
+.home-food-list {
+  display: flex;
+}
+
+.food-table {
+  margin-bottom: 3em;
+}
+
+.daily-history {
+  display: flex;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  padding: 0!important;
+}
+
+.daily-history h3 {
+  color: black;
+}
+
+.history-menus {
+  display: flex;
+  justify-content: flex-start !important;
+  width: 100%;
+}
+
+.history-menu {
+  width: 33% !important;
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+}
+
+.history-menu .menu-img {
+  width: 22vw;
+}
+
+.history-menu .menu-img img{
+  width: 22vw;
+  height: 22vw;
+  object-fit: cover;
+}
+
+/* auth */
+.auth-form {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.input-field {
+  width: 100%;
+  margin-bottom: 2em !important;
+}
+
+/* addfoods */
+.food-input {
+  width: 100%;
+}
+
+input[type="number"]::-webkit-outer-spin-button, 
+input[type="number"]::-webkit-inner-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+input[type="number"] { 
+  -moz-appearance:textfield; 
+} 
+
+.food-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.foods-table {
+  margin-bottom: .5em;
+}
+
+.delete-row {
+  margin-bottom: 2em !important;
+}
+
+.food-buttons button {
+  width: 33%;
+}
+
+.food-delete {
+  display: block;
+  width: 50%;
+  margin: 0 auto 5em;
+}
+
+.past-food-list {
+  display: flex;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+}
+
+.past-food-list-item {
+  display: flex;
+  justify-content: space-between !important;
+}
+
+.past-food-name { 
+  color: #000;
+}
+
+/* footer */
+footer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+  text-align: center;
+  padding: 0 0 2em;
+  color: black;
+  margin-top: 5em;
+}
+
+@media all and (max-width: 966px) {
+  .container {
+    width: 95%;
+  }
+}
+
+@media all and (max-width: 768px) {
+  body {
+    font-size: 15px;
+  }
+  h1 {
+    font-size: 20px;
+  }
+  /* header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1%;
+  }
+
+  .logo {
+    width: 45vw;
+    height: auto;
+    padding-top: .4em;
+  }
+
+  .menu-icon {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin: .1em .5em 0 0;
+  }
+
+  .modal-close-button {
+    cursor: pointer;
+    text-align: right;
+    padding-right: .3em;
+  }
+
+  .header-nav {
+    display: none;
+  }
+
+  .header-nav li {
+    width: auto !important;
+  }
+
+  /* home */
+  .sidebar {
+    display: none;
+  }
+
+  .content {
+    width: 100%;
+  }
+
+  .daily-history {
+    margin-bottom: 2em;
+  }
+
+  .history-menus {
+    overflow-x: scroll;
+  }
+
+  .history-menu {
+    width: 45% !important;
+  }
+  
+  .history-menu .menu-img {
+    width: 38vw;
+  }
+  
+  .history-menu .menu-img img{
+    width: 38vw;
+    height: 38vw;
+  }
+
+  /* auth */
+  .auth-form {
+    width: 95%;
+    margin: 0 auto;
+  }
+
+  /* addfoods */
+  .food-delete {
+    width: 100%;
+    margin: 0 auto 3em;
+  }
+
+  .food-buttons {
+    margin-top: 7em;
+    flex-direction: column;
+  }
+
+  .food-buttons button {
+    margin-bottom: .5em;
+    width: 100%;
+  }
+
+  .css-1acyv19 {
+    width: 90% !important;
+  }
 }
