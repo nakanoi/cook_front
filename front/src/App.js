@@ -19,6 +19,7 @@ import NotFound from "./components/NotFound";
 import API_ROOT from "./lib/const";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import FlashMessage from "./components/FlashMessage";
 
 const App = () => {
   axios.defaults.withCredentials = true;
@@ -27,6 +28,9 @@ const App = () => {
   const [user, setUser] = useState({});
   const [foods, setFoods] = useState([]);
   const [histories, setHistories] = useState([]);
+  const [flash, setFlash] = useState(false);
+  const [flashSeverity, setFlashSeverity] = useState("success");
+  const [flashMes, setFlashMes] = useState(null);
 
   const theme = createTheme({
     palette: {
@@ -129,90 +133,116 @@ const App = () => {
     setFoods(newFoods);
   }
 
+  const handleFlashMessage = (flash, severity, mes) => {
+    console.log(flash, severity, mes)
+    setFlash(flash);
+    setFlashSeverity(severity);
+    setFlashMes(mes);
+  }
+
+  const hideFlashMessage = () => {
+    setFlash(false);
+  }
+
   useEffect(() => {
     handleCurrentUser();
   }, []);
 
-  if (isLoading) {
-    return (
-      <React.Fragment>
-        <CircularProgress />
-      </React.Fragment>
-    )
-  } else {
-    return (
-      <React.Fragment>
-        <Router>
-          <Header
-            isLoggedIn={isLoggedIn}
-            signout={signout}
-          />
-          <div className="container">
-            <Switch>
-              <Route
-                path="/signin"
-                exact
-                render={
-                  () => <Signin
-                    isLoggedIn={isLoggedIn}
-                    handleCurrentUser={handleCurrentUser}
-                    setIsLoading={setIsLoading}
-                    theme={theme}
-                  />
-                }
-              ></Route>
-              <Route
-                path="/signup"
-                exact
-                render={
-                  () => <Signup
-                    isLoggedIn={isLoggedIn}
-                    handleCurrentUser={handleCurrentUser}
-                    setIsLoading={setIsLoading}
-                    theme={theme}
-                  />
-                }
-              ></Route>
-              {isLoggedIn && 
+  return (
+    <React.Fragment>
+      <Router>
+        <Header
+          isLoggedIn={isLoggedIn}
+          signout={signout}
+          hideFlashMessage={hideFlashMessage}
+        />
+        <div className="container">
+          {isLoading ? (
+            <CircularProgress />
+          ) : (
+            <div>
+              {flash &&
+                <FlashMessage
+                  flashMes={flashMes}
+                  flashSeverity={flashSeverity}
+                  handleFlashMessage={handleFlashMessage}
+                />
+              }
+              <Switch>
                 <Route
-                  path="/addfoods"
+                  path="/signin"
                   exact
                   render={
-                    () => <AddFoods
-                      user={user}
-                      headers={headers}
-                      foods={foods}
-                      lengt={foods.length}
-                      addFoods={addFoods}
-                      handleFoodInfo={handleFoodInfo}
-                      deleteFood={deleteFood}
-                      setFoods={setFoods}
+                    () => <Signin
+                      isLoggedIn={isLoggedIn}
+                      handleCurrentUser={handleCurrentUser}
                       setIsLoading={setIsLoading}
                       theme={theme}
+                      handleFlashMessage={handleFlashMessage}
                     />
                   }
                 ></Route>
-              }
-              <Route
-                path="/"
-                exact
-                render={
-                  () => <Home
-                    user={user}
-                    foods={foods}
-                    histories={histories}
-                    isLoggedIn={isLoggedIn}
-                  />
+                <Route
+                  path="/signup"
+                  exact
+                  render={
+                    () => <Signup
+                      isLoggedIn={isLoggedIn}
+                      handleCurrentUser={handleCurrentUser}
+                      setIsLoading={setIsLoading}
+                      theme={theme}
+                      handleFlashMessage={handleFlashMessage}
+                    />
+                  }
+                ></Route>
+                {isLoggedIn && 
+                  <Route
+                    path="/addfoods"
+                    exact
+                    render={
+                      () => <AddFoods
+                        user={user}
+                        headers={headers}
+                        foods={foods}
+                        lengt={foods.length}
+                        addFoods={addFoods}
+                        handleFoodInfo={handleFoodInfo}
+                        deleteFood={deleteFood}
+                        setFoods={setFoods}
+                        setIsLoading={setIsLoading}
+                        theme={theme}
+                        handleFlashMessage={handleFlashMessage}
+                      />
+                    }
+                  ></Route>
                 }
-              ></Route>
-              <Route component={NotFound}></Route>
-            </Switch>
-          </div>
-          <Footer />
-        </Router>
-      </React.Fragment>
-    );
-  };
+                <Route
+                  path="/"
+                  exact
+                  render={
+                    () => <Home
+                      user={user}
+                      foods={foods}
+                      histories={histories}
+                      isLoggedIn={isLoggedIn}
+                    />
+                  }
+                ></Route>
+                <Route
+                  exact
+                  render={
+                    () => <NotFound
+                      hideFlashMessage={hideFlashMessage}
+                    />
+                  }></Route>
+              </Switch>
+            </div>
+          )}
+        </div>
+        <Footer />
+      </Router>
+    </React.Fragment>
+  );
 }
 
 export default App;

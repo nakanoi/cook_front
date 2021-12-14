@@ -12,13 +12,31 @@ import API_ROOT from "../lib/const";
 
 const Signin = (props) => {
   axios.defaults.withCredentials = true;
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const validate = () => {
+    if (email === "") {
+      const mes = "メールアドレスは空欄ではいけません";
+      props.handleFlashMessage(true, "error", mes);
+      return false;
+    }
+    if (password === "") {
+      const mes = "パスワードは空欄ではいけません";
+      props.handleFlashMessage(true, "error", mes);
+      return false;
+    }
+    return true;
+  }
 
   const signin = async (event) => {
     event.preventDefault();
     try {
       props.setIsLoading(true);
+      const valid = validate();
+      if (!valid) throw Error;
+  
       const data = {
         email: email,
         password: password,

@@ -21,6 +21,7 @@ import API_ROOT from "../lib/const";
 
 const AddFoods = (props) => {
   axios.defaults.withCredentials = true;
+
   const [open, handleOpen] = useState(false);
   const modalOpen = () => handleOpen(true);
   const modalClose = () => handleOpen(false);
@@ -223,30 +224,34 @@ const AddFoods = (props) => {
     for (var i = 0; i < props.foods.length; i++) {
       for (var j = 0; j < keys.length; j++) {
         if (props.foods[i][keys[j]] === "") {
-          return [false, `${keyToColumn[keys[j]]}は空欄ではいけません`]
+          const mes = `${keyToColumn[keys[j]]}は空欄ではいけません`;
+          props.handleFlashMessage(true, "error", mes);
+          return false;
         }
       }
       try {
         sentFoods[i].store = Number(sentFoods[i].store);
-        if (sentFoods[i].store < 0) { return [false, `数量は正数でなければなりません`] }
+        if (sentFoods[i].store < 0) {
+          const mes = "数量は正数でなければなりません";
+          props.handleFlashMessage(true, "error", mes);
+          return false;
+        }
       } catch (err) {
-        return [false, `数量は正数でなければなりません`]
+        const mes = "数量は数字でなければなりません";
+        props.handleFlashMessage(true, "error", mes);
+        return false;
       }
     }
 
     props.setFoods(sentFoods);
-    return [true, null];
+    return true;
   }
 
   const sendFoods = async (event) => {
-    props.setIsLoading(true);
     event.preventDefault();
-    const valids = validateFoods();
-    if (!valids[0]) {
-      props.setIsLoading(false);
-      alert(valids[1]);
-      return
-    }
+    const valid = validateFoods();
+    if (!valid) { return }
+    props.setIsLoading(true);
     const data = props.foods.slice().map(food => {
       var newFood = {}
       Object.keys(food).map(key => {

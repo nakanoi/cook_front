@@ -53,17 +53,17 @@ const Header = (props) => {
     return (
       <React.Fragment>
         <header className="header">
-          <Link to="/">
+          <Link to="/" onClick={() => props.hideFlashMessage()}>
             <p className="logo"><img src={logo} alt="logo" /></p>
           </Link>
           <List className="header-nav">
             <ListItem key="home">
-              <Link to="/">ホーム</Link>
+              <Link to="/" onClick={() => props.hideFlashMessage()}>ホーム</Link>
             </ListItem>
             <ListItem key="addfoods">
-              <Link to="/addfoods">食材追加</Link>
+              <Link to="/addfoods" onClick={() => props.hideFlashMessage()}>食材追加</Link>
             </ListItem>
-            <ListItem key="signout">
+            <ListItem key="signout" onClick={() => props.hideFlashMessage()}>
               <Button
                 onClick={props.signout}
               >サインアウト</Button>
@@ -83,10 +83,10 @@ const Header = (props) => {
           <Box sx={modalStyle}>
             <List>
               <ListItem key="home" onClick={closeModal}>
-                <Link to="/">ホーム</Link>
+                <Link to="/" onClick={() => props.hideFlashMessage()}>ホーム</Link>
               </ListItem>
               <ListItem key="addfoods" onClick={closeModal}>
-                <Link to="/addfoods">食材追加</Link>
+                <Link to="/addfoods" onClick={() => props.hideFlashMessage()}>食材追加</Link>
               </ListItem>
               <ListItem key="signout">
                 <Button
@@ -107,18 +107,18 @@ const Header = (props) => {
     return (
       <React.Fragment>
         <header className="header">
-          <Link to="/">
+          <Link to="/" onClick={() => props.hideFlashMessage()}>
             <p className="logo"><img src={logo} alt="logo" /></p>
           </Link>
           <List className="header-nav">
             <ListItem key="home">
-              <Link to="/">ホーム</Link>
+              <Link to="/" onClick={() => props.hideFlashMessage()}>ホーム</Link>
             </ListItem>
             <ListItem key="signin">
-              <Link to="/signin">サインイン</Link>
+              <Link to="/signin" onClick={() => props.hideFlashMessage()}>サインイン</Link>
             </ListItem>
             <ListItem key="signup">
-              <Link to="/signup">サインアップ</Link>
+              <Link to="/signup" onClick={() => props.hideFlashMessage()}>サインアップ</Link>
             </ListItem>
           </List>
           <div className="menu-icon" onClick={showMenu}>
@@ -135,13 +135,13 @@ const Header = (props) => {
           <Box sx={modalStyle}>
             <List>
               <ListItem key="home" onClick={closeModal}>
-                <Link to="/">ホーム</Link>
+                <Link to="/" onClick={() => props.hideFlashMessage()}>ホーム</Link>
               </ListItem>
               <ListItem key="signin" onClick={closeModal}>
-                <Link to="/signin">サインイン</Link>
+                <Link to="/signin" onClick={() => props.hideFlashMessage()}>サインイン</Link>
               </ListItem>
               <ListItem key="signup" onClick={closeModal}>
-                <Link to="/signup">サインアップ</Link>
+                <Link to="/signup" onClick={() => props.hideFlashMessage()}>サインアップ</Link>
               </ListItem>
             </List>
             <CloseSharpIcon

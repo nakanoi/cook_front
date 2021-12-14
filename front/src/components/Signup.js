@@ -12,15 +12,43 @@ import API_ROOT from "../lib/const";
 
 const Signup = (props) => {
   axios.defaults.withCredentials = true;
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [password_confirmation, setPasswordConfirmation] = useState("");
 
+  const validate = () => {
+    if (name === "") {
+      const mes = "名前は空欄ではいけません";
+      props.handleFlashMessage(true, "error", mes);
+      return false;
+    }
+    if (email === "") {
+      const mes = "メールアドレスは空欄ではいけません";
+      props.handleFlashMessage(true, "error", mes);
+      return false;
+    }
+    if (password === "") {
+      const mes = "パスワードは空欄ではいけません";
+      props.handleFlashMessage(true, "error", mes);
+      return false;
+    }
+    if (password !== password_confirmation) {
+      const mes = "パスワードが一致していません";
+      props.handleFlashMessage(true, "error", mes);
+      return false;
+    }
+    return true;
+  }
+
   const signup = async (event) => {
     event.preventDefault();
     try {
       props.setIsLoading(true);
+      const valid = validate();
+      if (!valid) throw Error;
+    
       const data = {
         name: name,
         email: email,
