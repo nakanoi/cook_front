@@ -17,6 +17,7 @@ import {
 import axios from "axios";
 
 import API_ROOT from "../lib/const";
+import { createToken, returnStrDate } from "../lib/functions";
 
 
 const AddFoods = (props) => {
@@ -34,24 +35,6 @@ const AddFoods = (props) => {
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4,
-  }
-
-  const createToken = () => {
-    const S = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    const N = 40;
-    return Array.from(Array(N)).map(
-      () => S[Math.floor(Math.random() * S.length)]
-    ).join('');
-  }
-
-  const returnStrDate = (day) => {
-    var y = day.getFullYear();
-    var m = day.getMonth() + 1;
-    var d = day.getDate() + 1;
-    var h = day.getHours();
-    var min = day.getMinutes();
-    var s = day.getSeconds();
-    return `${y}-${m}-${d} ${h}:${min}:${s}`;
   }
 
   const foodData = (food) => {
@@ -219,28 +202,30 @@ const AddFoods = (props) => {
       "ignore": "レシピの検索対象",
     }
     const keys = ["name", "unit", "store", "ignore"];
-    let sentFoods = props.foods.slice();
+    let sentFoods = props.foods.slice(),
+        messages = [];
 
     for (var i = 0; i < props.foods.length; i++) {
       for (var j = 0; j < keys.length; j++) {
         if (props.foods[i][keys[j]] === "") {
           const mes = `${keyToColumn[keys[j]]}は空欄ではいけません`;
-          props.handleFlashMessage(true, "error", mes);
-          return false;
+          messages.push(["error", mes]);
         }
       }
       try {
         sentFoods[i].store = Number(sentFoods[i].store);
         if (sentFoods[i].store < 0) {
           const mes = "数量は正数でなければなりません";
-          props.handleFlashMessage(true, "error", mes);
-          return false;
+          messages.push(["error", mes]);
         }
       } catch (err) {
         const mes = "数量は数字でなければなりません";
-        props.handleFlashMessage(true, "error", mes);
-        return false;
+        messages.push(["error", mes]);
       }
+    }
+    if (messages.length) {
+      props.handleFlashMessage(messages);
+      return false;
     }
 
     props.setFoods(sentFoods);
@@ -251,6 +236,7 @@ const AddFoods = (props) => {
     event.preventDefault();
     const valid = validateFoods();
     if (!valid) { return }
+
     props.setIsLoading(true);
     const data = props.foods.slice().map(food => {
       var newFood = {}
@@ -262,13 +248,21 @@ const AddFoods = (props) => {
     });
     const request = {attributes: data};
     try {
-      await axios.post(
+      const res = await axios.post(
         `${API_ROOT}/foods`,
         request,
         {headers: props.headers()}
       );
+      if (res.status === 200) {
+        if (res.data.status === 200) {
+          const mes = "食材の追加に成功しました"
+          props.handleFlashMessage([["success", mes]]);
+        } else { throw Error; }
+      } else { throw Error; }
     } catch (e) {
       console.error(e);
+      const mes = "食材の追加に失敗しました　時間をおいて再度実行してください"
+      props.handleFlashMessage([["error", mes]]);
     } finally {
       props.setIsLoading(false);
     }

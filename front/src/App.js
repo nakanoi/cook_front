@@ -20,6 +20,7 @@ import API_ROOT from "./lib/const";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import FlashMessage from "./components/FlashMessage";
+import { zip } from "./lib/functions";
 
 const App = () => {
   axios.defaults.withCredentials = true;
@@ -29,8 +30,8 @@ const App = () => {
   const [foods, setFoods] = useState([]);
   const [histories, setHistories] = useState([]);
   const [flash, setFlash] = useState(false);
-  const [flashSeverity, setFlashSeverity] = useState("success");
-  const [flashMes, setFlashMes] = useState(null);
+  const [flashSeverity, setFlashSeverity] = useState([]);
+  const [flashMes, setFlashMes] = useState([]);
 
   const theme = createTheme({
     palette: {
@@ -133,15 +134,25 @@ const App = () => {
     setFoods(newFoods);
   }
 
-  const handleFlashMessage = (flash, severity, mes) => {
-    console.log(flash, severity, mes)
-    setFlash(flash);
-    setFlashSeverity(severity);
-    setFlashMes(mes);
+  const handleFlashMessage = (messages) => {
+    let newSeverity = [],
+        newMes = [];
+
+    messages.map((mes) => {
+      newSeverity.push(mes[0]);
+      newMes.push(mes[1]);
+      return mes;
+    });
+
+    setFlash(true);
+    setFlashSeverity(newSeverity);
+    setFlashMes(newMes);
   }
 
   const hideFlashMessage = () => {
     setFlash(false);
+    setFlashSeverity([]);
+    setFlashMes([]);
   }
 
   useEffect(() => {
@@ -162,11 +173,14 @@ const App = () => {
           ) : (
             <div>
               {flash &&
-                <FlashMessage
-                  flashMes={flashMes}
-                  flashSeverity={flashSeverity}
-                  handleFlashMessage={handleFlashMessage}
-                />
+                zip(flashMes, flashSeverity).map(flashes => {
+                  return (
+                    <FlashMessage
+                      flashMes={flashes[0]}
+                      flashSeverity={flashes[1]}
+                    />
+                  )
+                })
               }
               <Switch>
                 <Route
@@ -179,6 +193,7 @@ const App = () => {
                       setIsLoading={setIsLoading}
                       theme={theme}
                       handleFlashMessage={handleFlashMessage}
+                      hideFlashMessage={hideFlashMessage}
                     />
                   }
                 ></Route>
@@ -192,6 +207,7 @@ const App = () => {
                       setIsLoading={setIsLoading}
                       theme={theme}
                       handleFlashMessage={handleFlashMessage}
+                      hideFlashMessage={hideFlashMessage}
                     />
                   }
                 ></Route>
