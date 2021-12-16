@@ -40,7 +40,6 @@ const Home = (props) => {
     }, {});
 
   const dailyMenu = (histories, day) => {
-    console.log(histories)
     return histories.map(history => {
       return (
         <ListItem
