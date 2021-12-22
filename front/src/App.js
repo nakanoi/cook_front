@@ -9,6 +9,7 @@ import {
 import {
   CircularProgress,
   createTheme,
+  Backdrop,
 } from '@mui/material'
 
 import Signin from "./components/Signin";
@@ -168,92 +169,92 @@ const App = () => {
           hideFlashMessage={hideFlashMessage}
         />
         <div className="container">
-          {isLoading ? (
-            <CircularProgress />
-          ) : (
-            <div>
-              {flash &&
-                zip(flashMes, flashSeverity).map(flashes => {
-                  return (
-                    <FlashMessage
-                      flashMes={flashes[0]}
-                      flashSeverity={flashes[1]}
-                    />
-                  )
-                })
+          <Backdrop
+            sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={isLoading}
+          >
+            <CircularProgress/>
+          </Backdrop>
+          {flash &&
+            zip(flashMes, flashSeverity).map(flashes => {
+              return (
+                <FlashMessage
+                  flashMes={flashes[0]}
+                  flashSeverity={flashes[1]}
+                />
+              )
+            })
+          }
+          <Switch>
+            <Route
+              path="/signin"
+              exact
+              render={
+                () => <Signin
+                  isLoggedIn={isLoggedIn}
+                  handleCurrentUser={handleCurrentUser}
+                  setIsLoading={setIsLoading}
+                  theme={theme}
+                  handleFlashMessage={handleFlashMessage}
+                  hideFlashMessage={hideFlashMessage}
+                />
               }
-              <Switch>
-                <Route
-                  path="/signin"
-                  exact
-                  render={
-                    () => <Signin
-                      isLoggedIn={isLoggedIn}
-                      handleCurrentUser={handleCurrentUser}
-                      setIsLoading={setIsLoading}
-                      theme={theme}
-                      handleFlashMessage={handleFlashMessage}
-                      hideFlashMessage={hideFlashMessage}
-                    />
-                  }
-                ></Route>
-                <Route
-                  path="/signup"
-                  exact
-                  render={
-                    () => <Signup
-                      isLoggedIn={isLoggedIn}
-                      handleCurrentUser={handleCurrentUser}
-                      setIsLoading={setIsLoading}
-                      theme={theme}
-                      handleFlashMessage={handleFlashMessage}
-                      hideFlashMessage={hideFlashMessage}
-                    />
-                  }
-                ></Route>
-                {isLoggedIn && 
-                  <Route
-                    path="/addfoods"
-                    exact
-                    render={
-                      () => <AddFoods
-                        user={user}
-                        headers={headers}
-                        foods={foods}
-                        lengt={foods.length}
-                        addFoods={addFoods}
-                        handleFoodInfo={handleFoodInfo}
-                        deleteFood={deleteFood}
-                        setFoods={setFoods}
-                        setIsLoading={setIsLoading}
-                        theme={theme}
-                        handleFlashMessage={handleFlashMessage}
-                      />
-                    }
-                  ></Route>
+            ></Route>
+            <Route
+              path="/signup"
+              exact
+              render={
+                () => <Signup
+                  isLoggedIn={isLoggedIn}
+                  handleCurrentUser={handleCurrentUser}
+                  setIsLoading={setIsLoading}
+                  theme={theme}
+                  handleFlashMessage={handleFlashMessage}
+                  hideFlashMessage={hideFlashMessage}
+                />
+              }
+            ></Route>
+            {isLoggedIn && 
+              <Route
+                path="/addfoods"
+                exact
+                render={
+                  () => <AddFoods
+                    user={user}
+                    headers={headers}
+                    foods={foods}
+                    lengt={foods.length}
+                    addFoods={addFoods}
+                    handleFoodInfo={handleFoodInfo}
+                    deleteFood={deleteFood}
+                    setFoods={setFoods}
+                    setIsLoading={setIsLoading}
+                    theme={theme}
+                    handleFlashMessage={handleFlashMessage}
+                  />
                 }
-                <Route
-                  path="/"
-                  exact
-                  render={
-                    () => <Home
-                      user={user}
-                      foods={foods}
-                      histories={histories}
-                      isLoggedIn={isLoggedIn}
-                    />
-                  }
-                ></Route>
-                <Route
-                  exact
-                  render={
-                    () => <NotFound
-                      hideFlashMessage={hideFlashMessage}
-                    />
-                  }></Route>
-              </Switch>
-            </div>
-          )}
+              ></Route>
+            }
+            <Route
+              path="/"
+              exact
+              render={
+                () => <Home
+                  user={user}
+                  foods={foods}
+                  histories={histories}
+                  isLoggedIn={isLoggedIn}
+                />
+              }
+            ></Route>
+            <Route
+              exact
+              render={
+                () => <NotFound
+                  hideFlashMessage={hideFlashMessage}
+                />
+              }></Route>
+          </Switch>
         </div>
         <Footer />
       </Router>
