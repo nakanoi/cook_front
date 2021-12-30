@@ -16,8 +16,7 @@ import logo from "../images/logo.jpg";
 
 
 const Header = (props) => {
-  const [loggedInOpen, handleLoggedInOpen] = useState(false);
-  const [notLoggedInOpen, handleNotLoggedInOpen] = useState(false);
+  const [modalOpen, handleModalOpen] = useState(false);
   const modalStyle = {
     display: 'flex',
     justifyContent: 'space-between',
@@ -31,129 +30,92 @@ const Header = (props) => {
     p: 4,
   }
 
-  const showMenu = (event) => {
+  const handleModal = (event) => {
     event.preventDefault();
-    if (props.isLoggedIn) {
-      handleLoggedInOpen(true);
-    } else {
-      handleNotLoggedInOpen(true);
-    }
+    handleModalOpen(!modalOpen);
   }
 
-  const closeModal = (event) => {
-    event.preventDefault();
-    if (props.isLoggedIn) {
-      handleLoggedInOpen(false);
-    } else {
-      handleNotLoggedInOpen(false);
-    }
-  }
-
-  if (props.isLoggedIn) {
-    return (
-      <React.Fragment>
-        <header className="header">
-          <Link to="/">
-            <p className="logo"><img src={logo} alt="logo" /></p>
-          </Link>
-          <List className="header-nav">
-            <ListItem key="home">
-              <Link to="/">ホーム</Link>
+  return (
+    <React.Fragment>
+      <header className="header">
+        <Link to="/" onClick={() => props.hideFlashMessage()}>
+          <p className="logo"><img src={logo} alt="logo" /></p>
+        </Link>
+        <List className="header-nav">
+          <ListItem key="home">
+            <Link to="/" onClick={() => props.hideFlashMessage()}>ホーム</Link>
+          </ListItem>
+          {!props.isLoggedIn && (
+            <ListItem key="signin">
+              <Link to="/signin" onClick={() => props.hideFlashMessage()}>サインイン</Link>
             </ListItem>
+          )}
+          {!props.isLoggedIn && (
+            <ListItem key="signup">
+              <Link to="/signup" onClick={() => props.hideFlashMessage()}>サインアップ</Link>
+            </ListItem>
+          )}
+          {props.isLoggedIn && (
             <ListItem key="addfoods">
-              <Link to="/addfoods">食材追加</Link>
+              <Link to="/addfoods" onClick={() => props.hideFlashMessage()}>食材追加</Link>
             </ListItem>
-            <ListItem key="signout">
+          )}
+          {props.isLoggedIn && (
+            <ListItem key="signout" onClick={() => props.hideFlashMessage()}>
               <Button
                 onClick={props.signout}
               >サインアウト</Button>
             </ListItem>
-          </List>
-          <div className="menu-icon" onClick={showMenu}>
-            <RestaurantMenuSharpIcon
-              fontSize="large"
-            />
-            <p>MENU</p>
-          </div>
-        </header>
-        <Modal
-          open={loggedInOpen}
-          onClose={closeModal}
-        >
-          <Box sx={modalStyle}>
-            <List>
-              <ListItem key="home" onClick={closeModal}>
-                <Link to="/">ホーム</Link>
+          )}
+        </List>
+        <div className="menu-icon" onClick={handleModal}>
+          <RestaurantMenuSharpIcon
+            fontSize="large"
+          />
+          <p>MENU</p>
+        </div>
+      </header>
+      <Modal
+        open={modalOpen}
+        onClose={handleModal}
+      >
+        <Box sx={modalStyle}>
+          <List>
+            <ListItem key="home" onClick={handleModal}>
+              <Link to="/" onClick={() => props.hideFlashMessage()}>ホーム</Link>
+            </ListItem>
+            {!props.isLoggedIn && (
+              <ListItem key="signin" onClick={handleModal}>
+                <Link to="/signin" onClick={() => props.hideFlashMessage()}>サインイン</Link>
               </ListItem>
-              <ListItem key="addfoods" onClick={closeModal}>
-                <Link to="/addfoods">食材追加</Link>
+            )}
+            {!props.isLoggedIn && (
+              <ListItem key="signup" onClick={handleModal}>
+                <Link to="/signup" onClick={() => props.hideFlashMessage()}>サインアップ</Link>
               </ListItem>
+            )}
+            {props.isLoggedIn && (
+              <ListItem key="addfoods" onClick={handleModal}>
+                <Link to="/addfoods" onClick={() => props.hideFlashMessage()}>食材追加</Link>
+              </ListItem>
+            )}
+            {props.isLoggedIn && (
               <ListItem key="signout">
                 <Button
                   onClick={props.signout}
                 >サインアウト</Button>
               </ListItem>
-            </List>
-            <CloseSharpIcon
-              onClick={closeModal}
-              fontSize="large"
-              className="modal-close-button"
-            />
-          </Box>
-        </Modal>
-      </React.Fragment>
-    );
-  } else {
-    return (
-      <React.Fragment>
-        <header className="header">
-          <Link to="/">
-            <p className="logo"><img src={logo} alt="logo" /></p>
-          </Link>
-          <List className="header-nav">
-            <ListItem key="home">
-              <Link to="/">ホーム</Link>
-            </ListItem>
-            <ListItem key="signin">
-              <Link to="/signin">サインイン</Link>
-            </ListItem>
-            <ListItem key="signup">
-              <Link to="/signup">サインアップ</Link>
-            </ListItem>
+            )}
           </List>
-          <div className="menu-icon" onClick={showMenu}>
-            <RestaurantMenuSharpIcon
-              fontSize="large"
-            />
-            <p>MENU</p>
-          </div>
-        </header>
-        <Modal
-          open={notLoggedInOpen}
-          onClose={closeModal}
-        >
-          <Box sx={modalStyle}>
-            <List>
-              <ListItem key="home" onClick={closeModal}>
-                <Link to="/">ホーム</Link>
-              </ListItem>
-              <ListItem key="signin" onClick={closeModal}>
-                <Link to="/signin">サインイン</Link>
-              </ListItem>
-              <ListItem key="signup" onClick={closeModal}>
-                <Link to="/signup">サインアップ</Link>
-              </ListItem>
-            </List>
-            <CloseSharpIcon
-              onClick={closeModal}
-              fontSize="large"
-              className="modal-close-button"
-            />
-          </Box>
-        </Modal>
-      </React.Fragment>
-    );
-  }
+          <CloseSharpIcon
+            onClick={handleModal}
+            fontSize="large"
+            className="modal-close-button"
+          />
+        </Box>
+      </Modal>
+    </React.Fragment>
+  );
 }
 
 export default Header;

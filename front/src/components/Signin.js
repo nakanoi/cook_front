@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
-import Cookies from "js-cookie";
 import { Redirect } from "react-router-dom";
 import {
   TextField,
@@ -8,36 +6,26 @@ import {
   ThemeProvider,
 } from "@mui/material";
 
-import API_ROOT from "../lib/const";
+import { auth } from "../lib/functions";
+
 
 const Signin = (props) => {
-  axios.defaults.withCredentials = true;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const signin = async (event) => {
-    event.preventDefault();
-    try {
-      props.setIsLoading(true);
-      const data = {
-        email: email,
-        password: password,
-      }
-      const res = await axios.post(
-        `${API_ROOT}/auth/sign_in`,
-        data,
-      );
-      if (res.status === 200) {
-        Cookies.set("access-token", res.headers["access-token"], { secure: true });
-        Cookies.set("client", res.headers["client"], { secure: true });
-        Cookies.set("uid", res.headers["uid"], { secure: true });
-        props.handleCurrentUser();
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      props.setIsLoading(false);
+  const signin = (event) => {
+    const data = {
+      name: false,
+      email: email,
+      password: password,
+      password_confirmation: false,
     }
+    const errors = {
+      "Name has already been taken": "すでに登録済みのユーザー名です",
+      "Email has already been taken": "すでに登録済みのメールアドレスです",
+      "Invalid login credentials. Please try again.": "メールアドレスまたはパスワードが違います"
+    }
+    auth(event, props, data, errors, false); 
   }
 
   if (props.isLoggedIn) {
@@ -65,7 +53,10 @@ const Signin = (props) => {
               onChange={event => setPassword(event.target.value)}
             />
             <Button
-              onClick={event => signin(event)}
+              onClick={(event) => {
+                props.hideFlashMessage();
+                signin(event);
+              }}
               className="input-field"
               variant="contained"
               color="button"
