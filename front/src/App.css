@@ -36,3 +36,13 @@
     transform: rotate(360deg);
   }
 }
+
+.MuiAlert-standard {
+  margin-bottom: .5em!important;
+}
+
+.loading {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
