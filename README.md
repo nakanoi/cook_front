@@ -17,9 +17,6 @@ This service in on [Mealist](https://mealist.net)!
 
 I used these techniques below.
 
-### AWS
-![mealist](https://user-images.githubusercontent.com/72122101/145717733-fb58ff1f-115e-4bde-ae0d-b303bd9fffe0.png)
-
 ### Backend
 - [`Ruby on Rails`](https://github.com/rails/rails) - with API mode.
 - [`Nginx`](https://nginx.org/) - as a reverse proxy.
