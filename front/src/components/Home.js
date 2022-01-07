@@ -29,6 +29,8 @@ const Home = (props) => {
     var y = day.getFullYear();
     var m = day.getMonth() + 1;
     var d = day.getDate() + 1;
+    m = String(m).padStart(2, '0');
+    d = String(d).padStart(2, '0');
     return `${y}-${m}-${d}`;
   }
 
