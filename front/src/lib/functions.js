@@ -59,9 +59,21 @@ export const auth = async (event, props, data, errors, signup=true) => {
     );
     if (res.status === 200) {
       if (res.data.status === 200) {
-        Cookies.set("access-token", res.headers["access-token"], { secure: true });
-        Cookies.set("client", res.headers["client"], { secure: true });
-        Cookies.set("uid", res.headers["uid"], { secure: true });
+        Cookies.set(
+          "access-token",
+          res.headers["access-token"],
+          { secure: true, expires: 365 }
+        );
+        Cookies.set(
+          "client",
+          res.headers["client"],
+          { secure: true, expires: 365 }
+        );
+        Cookies.set(
+          "uid",
+          res.headers["uid"],
+          { secure: true, expires: 365 }
+        );
         props.handleFlashMessage([["success", res.data.message]]);
         props.handleCurrentUser();
       } else {
